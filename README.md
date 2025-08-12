@@ -1,33 +1,65 @@
-# AES Encryption & Decryption Modules with Data Splitter
+# AES Crypto Core - 64-bit AES with Data Splitting, Multiple Keys & Scoreboard
 
-## Overview
-This project implements a **64-bit AES encryption and decryption core** in Verilog, along with a **Data Splitter** and **Unslicer** to handle 128-bit data.  
-The design supports **multiple keys**, enabling independent encryption of two 64-bit halves, and includes a **testbench with scoreboard mechanism** to verify correctness.
+## 📌 Overview
+This project implements a **64-bit AES encryption and decryption system** in Verilog, extended with a **data splitter** for 128-bit inputs and **support for multiple keys**.  
+It also includes a **scoreboard-based verification environment** to ensure encryption-decryption correctness.
 
-## Features
+## 🔹 Key Features
 - **AES Core Modules**
-  - SubBytes
-  - ShiftRows
-  - MixColumns / InvMixColumns
+  - SubBytes & InvSubBytes
+  - ShiftRows & InverseShiftRows
+  - MixColumns & InvMixColumns
   - AddRoundKey
-- **Data Splitter**: Splits 128-bit input into two 64-bit blocks for parallel encryption.
-- **Unslicer**: Combines two 64-bit decrypted blocks into 128-bit original data.
-- **Multiple Key Support**: Different keys for each 64-bit block.
-- **Scoreboard Verification**: Automated checking of encryption–decryption consistency.
+- **Data Splitter & Joiner**
+  - Splits 128-bit input into two 64-bit halves for parallel AES encryption.
+  - Combines two decrypted halves into a 128-bit output.
+- **Multiple Key Support**
+  - Allows each 64-bit half to be encrypted with a unique key.
+- **Scoreboard Mechanism**
+  - Automated verification of encryption-decryption results.
+- **FIFO Integration**
+  - For storing and processing intermediate data.
 
-## How It Works
-1. **Encryption**
-   - Input: 128-bit plaintext
-   - Data Splitter divides it into two 64-bit halves.
-   - Each half passes through the AES encryption core.
-   - Encrypted halves are combined into a 128-bit ciphertext.
+## 📂 Project Structure
 
-2. **Decryption**
-   - Input: 128-bit ciphertext
-   - Unslicer splits into two encrypted halves.
-   - Each half passes through AES decryption core.
-   - Decrypted halves are combined to recover the original plaintext.
+├── AES_Encrypt.v # Top-level AES encryption module
+├── Decryption.v # Top-level AES decryption module
+├── AddRoundKey.v # AddRoundKey operation
+├── sub_bytes.v # SubBytes transformation
+├── InvSubByte.v # Inverse SubBytes
+├── ShiftRows.v # ShiftRows transformation
+├── InverseShiftRows.v # Inverse ShiftRows
+├── Mix_columns.v # MixColumns transformation
+├── InvMixColumn.v # Inverse MixColumns
+├── FIFO.v # FIFO buffer
+├── ScoreBoard.v # Scoreboard for verification
+│
+├── aes.v # AES core integration
+├── design.v # High-level design wrapper
+│
+├── AES_tb.v # AES encryption testbench
+├── testbench.v # General-purpose testbench
+├── unique_key_tb.v # Testbench for multiple unique keys
+├── multiple_key_tb.v # Testbench for multiple key scenario
+├── FIFO_tb.v # FIFO testbench
 
-3. **Scoreboard**
-   - Automatically compares decrypted output with original input.
-   - Displays pass/fail results in simulation.
+## 🔹 How It Works
+### 1. **Encryption Flow**
+1. Input 128-bit plaintext.
+2. Data splitter divides into two 64-bit blocks.
+3. Each block is encrypted via AES core (can use same or different keys).
+4. Encrypted blocks are combined into a 128-bit ciphertext.
+
+### 2. **Decryption Flow**
+1. Input 128-bit ciphertext.
+2. Splits into two encrypted halves.
+3. Each block is decrypted via AES decryption core.
+4. Outputs the original 128-bit plaintext.
+
+### 3. **Scoreboard**
+- Compares decrypted output with original plaintext.
+- Reports pass/fail for each test case.
+
+## AES Encryption Process Diagram
+
+![AES Encryption Diagram](AES_encryption_diagram.png)
