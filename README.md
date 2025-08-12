@@ -62,4 +62,4 @@ It also includes a **scoreboard-based verification environment** to ensure encry
 
 ## AES Encryption Process Diagram
 
-![AES Encryption Diagram](AES Crypto Core\AES_encryption_diagram.png)
+![AES Encryption Diagram](AES_encryption_diagram.png)
